@@ -1,4 +1,4 @@
-
+import 'dotenv/config'
 import jwt from "jsonwebtoken"
 
 export function createAccessToken(payload){
@@ -6,7 +6,7 @@ export function createAccessToken(payload){
     return new Promise((resolve, reject) => {
         jwt.sign(
             payload,
-            "secretkey", // Secret para validar el token, revisar si se mete en .env o donde jsjsj
+            process.env.JWT_SECRET, // Secret para validar el token
             {
                 expiresIn: "1d"
             },
