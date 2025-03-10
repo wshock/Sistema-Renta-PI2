@@ -3,6 +3,8 @@
 import pool from "../db.js";
 import bcrypt from "bcryptjs"
 import {createAccessToken} from "../libs/jwt.js"
+import 'dotenv/config'
+import jwt from 'jsonwebtoken';
 
 const register = async (req, res) => {
 
@@ -29,7 +31,7 @@ const register = async (req, res) => {
         })
 
     } catch(error) {
-        if (error.code === "23505") res.status(409).json({ message: error.message }) // Status que se devuelve si se intenta registrar con un email ya registrado.
+        if (error.code === "23505") res.status(409).json(["Este email ya está en uso, prueba con otro."]) // Status que se devuelve si se intenta registrar con un email ya registrado.
         else { res.status(500).json({ message: error.message }) }                    // HTTP 409: Conflict
     }
 }
@@ -45,12 +47,12 @@ const login = async (req, res) => {
             [email]
         )
         
-        if (resDB.rows.length === 0) return res.status(404).json({message: "Email not found"});
+        if (resDB.rows.length === 0) return res.status(404).json(["Email o contraseña incorrectos"]);
 
         const dbReturn = resDB.rows[0]
 
         const isMatch = await bcrypt.compare( password, dbReturn.password )
-        if (!isMatch) return res.status(400).json({message: "Incorrect password"}); // HTTP 400: bad request
+        if (!isMatch) return res.status(400).json(["Email o contraseña incorrectos"]); // HTTP 400: bad request
 
         const token = await createAccessToken({ id: dbReturn.id })
         res.cookie('token', token);
@@ -90,4 +92,18 @@ const profile = async (req, res) => {
     }
 }
 
-export { register, login, logout, profile };
+const verifyToken = (req, res) => {
+    const { token } = req.cookies; 
+
+    if (!token) return res.status(401).json({ message: "Unauthorized" }); // HTTP 401: Unauthorized
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+
+        if (err) return res.status(401).json({ message: "Invalid token" }); 
+        
+        req.user = user; // le asigno los datos de el token verificado a req.user para que pueda ser usado posteriormente
+                         // en las funciones/rutas siguientes a este middleware.   
+    })
+}
+
+export { register, login, logout, profile, verifyToken };

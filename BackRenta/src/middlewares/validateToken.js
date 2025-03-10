@@ -17,4 +17,4 @@ export const validateToken = (req, res, next) => {
         next();
     })
 
-}
+} 
