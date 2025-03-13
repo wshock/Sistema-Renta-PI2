@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false); // State para saber si el usuario está Authenticated
     const [registerErrors, setRegisterErrors] = useState([]); // State para manejar y mostrar los errores del registro
     const [loginErrors, setLoginErrors] = useState([]); // State para manejar y mostrar los errores del login
+    const [loading, setLoading] = useState(true) // State para manejar el "loading" de la página y evitar renderizaciones indeseadas
 
     const signUp = async (user) => { // Funcion para registrarse, setea el user (sus datos), y setea su Auth a true
         try {
@@ -53,15 +54,39 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const notAuth = () => {
+        setUser(null);
+        setIsAuthenticated(false); 
+    }
+
     useEffect(() => {
-        const cookies = Cookies.get()
-        if (cookies.token) {
-            try {
-                const res = verifyTokenRequest(cookies.token)
-            } catch (error) {
-                
+
+        const verifying = async () => {
+
+            const cookies = Cookies.get()
+
+            if (cookies.token) {
+                try {
+                    const res = await verifyTokenRequest()
+                    if (res.status === 200) {
+                        setUser(res.data);
+                        setIsAuthenticated(true)     
+                        setLoading(false)               
+                    } else {
+                        notAuth();
+                        setLoading(false)      
+                    }
+                } catch (error) {
+                    console.log(error);
+                    notAuth();
+                    setLoading(false)
+                }
+            } else {
+                notAuth();
+                setLoading(false)
             }
         }
+        verifying();
     }, []);
 
     return (
@@ -71,6 +96,7 @@ export const AuthProvider = ({ children }) => {
                 signIn,
                 logOut,
                 user,
+                loading,
                 isAuthenticated,
                 registerErrors,
                 loginErrors
