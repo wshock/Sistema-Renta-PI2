@@ -81,7 +81,7 @@ const profile = async (req, res) => {
                                                                                                 // seteo previamente en el middleware), y acceder directamente
         const dbReturn = resDB.rows[0]                                                          // al id para buscar en mi bd los datos del user con ese id.
 
-        return res.json({
+        return res.status(200).json({
             id: dbReturn.id,
             name: dbReturn.name,
             email: dbReturn.email
@@ -92,18 +92,35 @@ const profile = async (req, res) => {
     }
 }
 
-const verifyToken = (req, res) => {
+const verifyToken = async (req, res) => {
+
     const { token } = req.cookies; 
 
     if (!token) return res.status(401).json({ message: "Unauthorized" }); // HTTP 401: Unauthorized
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
 
         if (err) return res.status(401).json({ message: "Invalid token" }); 
         
-        req.user = user; // le asigno los datos de el token verificado a req.user para que pueda ser usado posteriormente
-                         // en las funciones/rutas siguientes a este middleware.   
+        try {                                                                                       
+            const resDB = await pool.query("SELECT * FROM users WHERE id = $1", [user.id])      
+                                                                                                    
+            if (resDB.rows.length === 0) return res.status(404).json({message: "User not found"});  
+                                                                                                    
+            const dbReturn = resDB.rows[0]                                                          
+    
+            return res.status(200).json({
+                id: dbReturn.id,
+                name: dbReturn.name,
+                email: dbReturn.email
+            })
+    
+        } catch (error) {
+            res.status(500).json({ message: error.message })
+        } 
     })
-}
 
+ 
+}
+ 
 export { register, login, logout, profile, verifyToken };

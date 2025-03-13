@@ -4,6 +4,7 @@ import RegisterLogin from './pages/RegisterLogin'
 import { AuthProvider } from './context/AuthContext'
 import Profile from './pages/Profile'
 import ProtectedRoutes from './ProtectedRoutes'
+import HomePage from './pages/HomePage'
 
 function App() {
 
@@ -12,11 +13,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           
-          <Route path='/' element={<div>Home page o Landing page</div>}/> { /* Landing o Home page */ }
+          <Route path='/' element={<HomePage />}/> { /* Landing o Home page */ }
           <Route path='/log-reg' element={<RegisterLogin />}/>
 
           <Route element={<ProtectedRoutes />}>
             <Route path='/profile' element={<Profile />}/>
+
+
           </Route>
           
         </Routes>
