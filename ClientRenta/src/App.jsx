@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext'
 import Profile from './pages/Profile'
 import ProtectedRoutes from './ProtectedRoutes'
 import HomePage from './pages/HomePage'
+import Feed from './pages/Feed'
 
 function App() {
 
@@ -17,9 +18,8 @@ function App() {
           <Route path='/log-reg' element={<RegisterLogin />}/>
 
           <Route element={<ProtectedRoutes />}>
-            <Route path='/profile' element={<Profile />}/>
-
-
+            <Route path='/feed' element={<Feed />}/>
+            <Route path='/profile' element={<Profile/>} />
           </Route>
           
         </Routes>

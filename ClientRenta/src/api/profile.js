@@ -1,9 +1,11 @@
 import axios from './axios.js';
 
-const getProfileRequest = (id) => {
-    return axios.get( `/profile/getProfile/${id}` )
+const getProfileRequest = () => {
+    return axios.get( `/profile/getProfile` )
 }
 
-const editProfileRequest = (id) => {
-    return axios.put( `/profile/editProfile/${id}` )
+const editProfileRequest = (updateInfo) => {
+    return axios.patch( `/profile/editProfile`, updateInfo )
 }
+
+export { getProfileRequest, editProfileRequest }

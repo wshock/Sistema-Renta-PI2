@@ -13,7 +13,7 @@ function Register(){
     const navigate = useNavigate();
     
     useEffect(() => {
-        if (isAuthenticated) navigate("/profile")
+        if (isAuthenticated) navigate("/feed")
     })
 
 

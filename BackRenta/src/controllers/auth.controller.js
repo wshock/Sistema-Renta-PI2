@@ -107,12 +107,13 @@ const verifyToken = async (req, res) => {
                                                                                                     
             if (resDB.rows.length === 0) return res.status(404).json({message: "User not found"});  
                                                                                                     
-            const dbReturn = resDB.rows[0]                                                          
-    
+            const dbReturn = resDB.rows[0]   
+                
             return res.status(200).json({
                 id: dbReturn.id,
                 name: dbReturn.name,
-                email: dbReturn.email
+                email: dbReturn.email,
+                bio: dbReturn.bio
             })
     
         } catch (error) {
