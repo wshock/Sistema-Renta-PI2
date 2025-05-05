@@ -13,7 +13,7 @@ function Login(){
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isAuthenticated) navigate("/profile")
+        if (isAuthenticated) navigate("/feed")
     })
 
     const onSubmit = handleSubmit(async (values)=>{
