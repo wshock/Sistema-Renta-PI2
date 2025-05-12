@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { createPostRequest } from "../api/posts";
 
 const CreateForm = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [formData, setFormData] = useState({
     type_post: "offer",
     title: "",
@@ -19,117 +26,140 @@ const CreateForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const post = {
+      user_id: user.id,
+      ...formData,
+    };
+
+    try {
+      const response = await createPostRequest(post);
+      if (response.status === 201 || response.status === 200) {
+        console.log("Post creado exitosamente");
+        navigate("/feed");
+      } else {
+        throw new Error("Error en la respuesta del servidor");
+      }
+    } catch (error) {
+      console.error("Error al crear el post:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo crear el post. Intenta nuevamente.",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+
     console.log("Formulario enviado");
-    console.log(formData);
+    console.log(post);
   };
   return (
-
     <>
-    
-    <div className=" !my-10 flex flex-col !p-10 w-xl mx-auto bg-white rounded-md shadow-2xl">
-      <h2 className="text-2xl font-bold mb-4">Crear un Post</h2>
+      <div className=" !my-10 flex flex-col !p-10 w-xl mx-auto bg-white rounded-md shadow-2xl">
+        <h2 className="text-2xl font-bold mb-4">Crear un Post</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4" action="">
-        <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-          <label className="text-lg font-medium" htmlFor="type_post">
-            Tipo de publicación
-          </label>
-          <select
-            name="type_post"
-            id="type_post"
-            value={formData.type_post}
-            onChange={handleChange}
-            className="!p-1"
+        <form onSubmit={handleSubmit} className="space-y-4" action="">
+          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
+            <label className="text-lg font-medium" htmlFor="type_post">
+              Tipo de publicación
+            </label>
+            <select
+              name="type_post"
+              id="type_post"
+              value={formData.type_post}
+              onChange={handleChange}
+              className="!p-1"
+            >
+              <option value="offer">Ofrezco</option>
+              <option value="request">Busco</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
+            <label className="text-lg font-medium" htmlFor="title">
+              Título
+            </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="!p-1"
+            />
+          </div>
+
+          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
+            <label className="text-lg font-medium" htmlFor="description">
+              Descripción
+            </label>
+            <textarea
+              className="!p-1"
+              name="description"
+              id="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows="3 " // Puedes ajustar el número de filas según sea necesario
+            ></textarea>
+          </div>
+
+          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
+            <label className="text-lg font-medium" htmlFor="price">
+              Precio
+            </label>
+            <input
+              type="number"
+              name="price"
+              id="price"
+              value={formData.price}
+              onChange={handleChange}
+              className="!p-1"
+              min="0"
+            />
+          </div>
+
+          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
+            <label className="text-lg font-medium" htmlFor="rental_duration">
+              Duración del arriendo
+            </label>
+            <input
+              type="number"
+              name="rental_duration"
+              id="rental_duration"
+              value={formData.rental_duration}
+              onChange={handleChange}
+              className="!p-1"
+              min="0"
+            />
+          </div>
+
+          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
+            <label className="text-lg font-medium" htmlFor="rental_unit">
+              Unidad
+            </label>
+            <select
+              name="rental_unit"
+              id="rental_unit"
+              value={formData.rental_unit}
+              onChange={handleChange}
+              className="!p-1"
+            >
+              <option value="days">Días</option>
+              <option value="weeks">Semanas</option>
+              <option value="months">Meses</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm !px-5 !py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           >
-            <option value="offer">Ofrezco</option>
-            <option value="request">Busco</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-          <label className="text-lg font-medium" htmlFor="title">
-            Título
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="!p-1"
-          />
-        </div>
-
-        <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-          <label className="text-lg font-medium" htmlFor="description">
-            Descripción
-          </label>
-          <textarea
-            className="!p-1"
-            name="description"
-            id="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="3 " // Puedes ajustar el número de filas según sea necesario
-          ></textarea>
-        </div>
-
-        <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-          <label className="text-lg font-medium" htmlFor="price">
-            Precio
-          </label>
-          <input
-            type="number"
-            name="price"
-            id="price"
-            value={formData.price}
-            onChange={handleChange}
-            className="!p-1"
-            min="0"
-          />
-        </div>
-
-        <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-          <label className="text-lg font-medium" htmlFor="rental_duration">
-            Duración del arriendo
-          </label>
-          <input
-            type="number"
-            name="rental_duration"
-            id="rental_duration"
-            value={formData.rental_duration}
-            onChange={handleChange}
-            className="!p-1"
-            min="0"
-          />
-        </div>
-
-
-        <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-          <label className="text-lg font-medium" htmlFor="rental_unit">
-            Unidad
-          </label>
-          <select
-            name="rental_unit"
-            id="rental_unit"
-            value={formData.rental_unit}
-            onChange={handleChange}
-            className="!p-1"
-          >
-            <option value="days">Días</option>
-            <option value="weeks">Semanas</option>
-            <option value="months">Meses</option>
-          </select>
-        </div>
-
-        
-        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm !px-5 !py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Publicar</button>
-
-      </form>
-    </div>
+            Publicar
+          </button>
+        </form>
+      </div>
     </>
   );
 };
