@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import PostCard from "../components/PostCard";
 
 function Feed() {
 
@@ -18,6 +19,8 @@ function Feed() {
                     + Añadir post
                 </button>
             </Link>
+
+        
 
         </div>
         
