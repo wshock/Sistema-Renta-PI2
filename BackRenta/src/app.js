@@ -6,6 +6,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.router.js';
 import profileRoutes from './routes/profile.router.js'
+import postRoutes from './routes/post.router.js'
 
 // Initializing
 const app = express();
@@ -25,5 +26,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes)
+app.use('/api/posts', postRoutes)
+
 
 export default app;

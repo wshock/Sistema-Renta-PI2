@@ -3,6 +3,7 @@ import userDefault from "../assets/user-default.svg";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { editProfileRequest } from "../api/profile.js";
+import HomeButton from "../components/HomeButton.jsx";
 
 
 const MySwal = withReactContent(Swal);
@@ -75,12 +76,7 @@ function Profile() {
   };
   return (
     <div>
-      <a
-        href="/feed"
-        className="absolute top-6 left-6 bg-white text-blue-900 text-lg !px-5 !py-2 rounded-xl font-semibold shadow-md hover:bg-[#dde6ff] hover:scale-103 hover:shadow-lg transition-all"
-      >
-        Volver
-      </a>
+      <HomeButton></HomeButton>
 
       <div className="flex justify-center items-center min-h-screen">
         <div className="w-full max-w-2xl bg-white shadow-2xl rounded-2xl !p-6 border border-gray-200 flex flex-row items-center gap-6">

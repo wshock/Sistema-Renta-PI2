@@ -6,6 +6,7 @@ import Profile from './pages/Profile'
 import ProtectedRoutes from './ProtectedRoutes'
 import HomePage from './pages/HomePage'
 import Feed from './pages/Feed'
+import CreatePostPage from './pages/CreatePostPage'
 
 function App() {
 
@@ -20,12 +21,12 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path='/feed' element={<Feed />}/>
             <Route path='/profile' element={<Profile/>} />
+            <Route path='/createpost' element={<CreatePostPage/>}/>
           </Route>
           
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-
   )
 }
 
