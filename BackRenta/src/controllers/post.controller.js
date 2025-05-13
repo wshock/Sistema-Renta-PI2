@@ -57,8 +57,15 @@ const post = async (req, res) => {
   }
 };
 
-const getPosts = async () => {
+const getPosts = async (req, res) => {
   // listar los posts en el feed
+    try {
+    const result = await pool.query('SELECT * FROM posts ORDER BY date_created DESC');
+    return res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error al obtener posts:', err);
+    return res.status(500).json({ message: 'Error interno del servidor', error: err });
+  }
 };
 
 const editPost = async () => {
