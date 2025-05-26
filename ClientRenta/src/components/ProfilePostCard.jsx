@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from "sweetalert2";
 
 const ProfilePostCard = ({
   type_post,
@@ -10,6 +11,23 @@ const ProfilePostCard = ({
   image,
   onDelete,
 }) => {
+  // Función para confirmar eliminación
+  const handleDelete = async () => {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el post permanentemente.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+    if (result.isConfirmed) {
+      onDelete();
+    }
+  };
+
   return (
     <div className="!max-w-lg !rounded !overflow-hidden !shadow-lg !bg-white border !border-gray-200 relative">
       <img
@@ -32,11 +50,10 @@ const ProfilePostCard = ({
           </p>
         </div>
         <button
-          className="!p-1 absolute top-0 right-0 bg-red-400 text-white px-3 py-1 rounded hover:bg-red-600 transition flex items-center justify-center"
-          onClick={onDelete}
+          className="!p-1 absolute top-0 right-0 bg-[#8ba6ff] text-white px-3 py-1 rounded hover:bg-red-600 transition flex items-center justify-center"
+          onClick={handleDelete}
           title="Eliminar"
         >
-          {/* Ícono de basura SVG */}
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a2 2 0 012-2h2a2 2 0 012 2v2" />
           </svg>
