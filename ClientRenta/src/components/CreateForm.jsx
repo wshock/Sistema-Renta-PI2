@@ -16,6 +16,7 @@ const CreateForm = () => {
     rental_duration: "",
     rental_unit: "days",
     status: "active",
+    photo: null,
   });
 
   const handleChange = (e) => {
@@ -150,6 +151,36 @@ const CreateForm = () => {
               <option value="weeks">Semanas</option>
               <option value="months">Meses</option>
             </select>
+          </div>
+
+          
+          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
+            <label className="text-lg font-medium mb-2" htmlFor="photo">
+              Imagen
+            </label>
+            <input
+              type="file"
+              name="photo"
+              id="photo"
+              accept="image/*"
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  photo: e.target.files[0],
+                }))
+              }
+              className="!mt-2 text-sm text-gray-500"
+            />
+            <button
+              type="button"
+              className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 transition "
+              onClick={() => document.getElementById("photo").click()}
+            >
+              Subir imagen
+            </button>
+            {formData.photo && (
+              <span className="mt-2 text-sm text-gray-600">{formData.photo.name}</span>
+            )}
           </div>
 
           <button
