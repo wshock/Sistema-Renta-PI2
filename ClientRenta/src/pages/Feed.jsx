@@ -38,6 +38,7 @@ function Feed() {
             rental_duration={post.rental_duration}
             rental_unit={post.rental_unit}
             image={`http://localhost:3000${post.image_url}`} // Esto asume que en la BD guardaste `/uploads/nombre.jpg`
+            user={post.user}
           />
         ))}
       </div>

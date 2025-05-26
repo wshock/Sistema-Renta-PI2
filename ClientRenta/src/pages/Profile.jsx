@@ -4,7 +4,9 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { editProfileRequest } from "../api/profile.js";
 import HomeButton from "../components/HomeButton.jsx";
-
+import { useEffect, useState } from "react";
+import { getPostsRequest } from "../api/posts";
+import ProfilePostCard from "../components/ProfilePostCard.jsx";
 
 const MySwal = withReactContent(Swal);
 
@@ -74,12 +76,32 @@ function Profile() {
       },
     });
   };
+
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    // Llamar al backend para obtener los posts
+    const fetchPosts = async () => {
+      try {
+        const res = await getPostsRequest();
+        setPosts(res.data);
+      } catch (error) {
+        console.error("Error al obtener posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+
+
   return (
-    <div>
+    <div className="flex flex-col">
       <HomeButton></HomeButton>
 
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="w-full max-w-2xl bg-white shadow-2xl rounded-2xl !p-6 border border-gray-200 flex flex-row items-center gap-6">
+      <div className="flex justify-center items-center min-h-60">
+        <div className="w-full max-w-lg bg-white shadow-2xl rounded-2xl !p-6 border border-gray-200 flex flex-row items-center gap-6">
           <img
             src={userDefault}
             alt="User Avatar"
@@ -102,6 +124,28 @@ function Profile() {
           </div>
         </div>
       </div>
+
+      <div className="flex flex-col justify-center space-between items-center !mt-6 !mb-4 bg-gradient-to-b from-white/90 via-white/60 to-gray-100/90 shadow-md rounded-lg p-4 border border-gray-200 w-3xl"> 
+        <h2 className="text-3xl !mt-10 font-semibold text-gray-800">Post activos</h2>
+
+        <div className="grid gap-6 !my-15">
+        {posts.map((post) => (
+          <ProfilePostCard
+            key={post.id}
+            type_post={post.type_post}
+            title={post.title}
+            description={post.description}
+            price={post.price}
+            rental_duration={post.rental_duration}
+            rental_unit={post.rental_unit}
+            image={`http://localhost:3000${post.image_url}`} // Esto asume que en la BD guardaste `/uploads/nombre.jpg`
+            user={post.user}
+          />
+        ))}
+      </div>
+      </div>
+
+      
     </div>
   );
 }

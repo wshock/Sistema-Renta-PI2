@@ -1,6 +1,6 @@
 import React from "react";
 
-const PostCard = ({ type_post, title, description, price, rental_duration, rental_unit, image }) => {
+const PostCard = ({ type_post, title, description, price, rental_duration, rental_unit, image, user={name: "---", email: "---"} }) => {
   return (
     <div className="!max-w-lg !rounded !overflow-hidden !shadow-lg !bg-white border !border-gray-200">
       <img
@@ -20,6 +20,9 @@ const PostCard = ({ type_post, title, description, price, rental_duration, renta
           </p>
           <p>
             <span className="font-semibold">Duración:</span> {rental_duration} {rental_unit}
+          </p>
+          <p className="!mt-4 !text-gray-500 bg-gray-100 !p-2 !rounded">
+            <span className="font-semibold">Contacto:</span> {user?.name} ({user?.email})
           </p>
         </div>
       </div>
