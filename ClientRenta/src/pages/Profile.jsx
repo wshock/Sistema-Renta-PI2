@@ -5,7 +5,7 @@ import withReactContent from "sweetalert2-react-content";
 import { editProfileRequest } from "../api/profile.js";
 import HomeButton from "../components/HomeButton.jsx";
 import { useEffect, useState } from "react";
-import { getPostsRequest } from "../api/posts";
+import { getUserPostsRequest, deletePostRequest } from "../api/posts";
 import ProfilePostCard from "../components/ProfilePostCard.jsx";
 
 const MySwal = withReactContent(Swal);
@@ -84,7 +84,7 @@ function Profile() {
     // Llamar al backend para obtener los posts
     const fetchPosts = async () => {
       try {
-        const res = await getPostsRequest();
+        const res = await getUserPostsRequest(user.id);
         setPosts(res.data);
       } catch (error) {
         console.error("Error al obtener posts:", error);
@@ -140,6 +140,21 @@ function Profile() {
             rental_unit={post.rental_unit}
             image={`http://localhost:3000${post.image_url}`} // Esto asume que en la BD guardaste `/uploads/nombre.jpg`
             user={post.user}
+            onDelete={async () => {
+              try {
+                const res = await deletePostRequest(post.id);
+                if (res.status === 200) {
+                  Swal.fire("Éxito", "Post eliminado correctamente", "success").then(() => {
+                    window.location.reload();
+                  });
+                } else {
+                  throw new Error("Error al eliminar el post");
+                }
+              } catch (error) {
+                console.error(error);
+                Swal.fire("Error", "No se pudo eliminar el post", "error");
+              }
+            }}
           />
         ))}
       </div>

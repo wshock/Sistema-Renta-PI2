@@ -72,4 +72,43 @@ const editPost = async () => {
   // el usuario debería poder editar contenido de su post
 };
 
-export { post, getPosts, editPost };
+const getUserPosts = async (req, res) => {
+  // obtener los posts de un usuario específico
+  const userId = parseInt(req.params.id);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "ID de usuario inválido" });
+  }
+
+  try {
+    const result = await pool.query('SELECT * FROM posts WHERE user_id = $1 ORDER BY date_created DESC', [userId]);
+    return res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error al obtener posts del usuario:', err);
+    return res.status(500).json({ message: 'Error interno del servidor', error: err });
+  }
+}
+
+const deletePost = async (req, res) => {
+  // eliminar un post por su ID
+  const postId = parseInt(req.params.id);
+
+  if (isNaN(postId)) {
+    return res.status(400).json({ error: "ID de post inválido" });
+  }
+
+  try {
+    const result = await pool.query('DELETE FROM posts WHERE id = $1 RETURNING *', [postId]);
+    
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    return res.status(200).json({ message: "Post eliminado correctamente", post: result.rows[0] });
+  } catch (err) {
+    console.error('Error al eliminar el post:', err);
+    return res.status(500).json({ message: 'Error interno del servidor', error: err });
+  }
+};
+
+export { post, getPosts, editPost, getUserPosts, deletePost };

@@ -7,4 +7,13 @@ const createPostRequest = (postInfo) => {
 const getPostsRequest = () => {
     return axios.get('/posts/getPosts')
 }
-export { createPostRequest, getPostsRequest }
+
+const getUserPostsRequest = (userId) => {
+    return axios.get(`/posts/getUserPosts/${userId}`)
+}
+
+const deletePostRequest = (postId) => {
+    return axios.delete(`/posts/deletePost/${postId}`)
+}
+
+export { createPostRequest, getPostsRequest, getUserPostsRequest, deletePostRequest };
