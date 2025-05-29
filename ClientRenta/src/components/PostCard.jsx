@@ -5,7 +5,7 @@ const PostCard = ({ type_post, title, description, price, rental_duration, renta
     <div className="!max-w-lg !rounded !overflow-hidden !shadow-lg !bg-white border !border-gray-200">
       <img
         className="!w-full !h-48 !object-cover"
-        src={"https://picsum.photos/200/200?blur=5"} // Imagen por defecto si no se proporciona una
+        src={image} // Imagen por defecto si no se proporciona una
         alt="Post"
       />
       <div className="!px-6 !py-4">

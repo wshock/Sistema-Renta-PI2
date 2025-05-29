@@ -27,7 +27,7 @@ function Feed() {
         <Navbar />
       </div>
 
-      <div className="grid gap-6 !mt-30">
+      <div className="grid gap-6 !mt-30 !mb-8">
         {posts.map((post) => (
           <PostCard
             key={post.id}
