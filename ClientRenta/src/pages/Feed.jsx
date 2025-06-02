@@ -27,7 +27,7 @@ function Feed() {
         <Navbar />
       </div>
 
-      <div className="grid gap-6 !mt-30">
+      <div className="grid gap-6 !mt-30 !mb-8">
         {posts.map((post) => (
           <PostCard
             key={post.id}
@@ -37,7 +37,9 @@ function Feed() {
             price={post.price}
             rental_duration={post.rental_duration}
             rental_unit={post.rental_unit}
-            image={`http://localhost:3000${post.image_url}`} // Esto asume que en la BD guardaste `/uploads/nombre.jpg`
+            image={post.photo} 
+            userName={post.name}
+            userEmail={post.email}
           />
         ))}
       </div>

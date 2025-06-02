@@ -7,6 +7,7 @@ import ProtectedRoutes from './ProtectedRoutes'
 import HomePage from './pages/HomePage'
 import Feed from './pages/Feed'
 import CreatePostPage from './pages/CreatePostPage'
+import SearchPost from './pages/SearchPost'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
             <Route path='/feed' element={<Feed />}/>
             <Route path='/profile' element={<Profile/>} />
             <Route path='/createpost' element={<CreatePostPage/>}/>
+            <Route path='/searchProduct' element={<SearchPost />} />
           </Route>
           
         </Routes>

@@ -1,11 +1,11 @@
 import React from "react";
 
-const PostCard = ({ type_post, title, description, price, rental_duration, rental_unit, image }) => {
+const PostCard = ({ type_post, title, description, price, rental_duration, rental_unit, image, userName, userEmail }) => {
   return (
     <div className="!max-w-lg !rounded !overflow-hidden !shadow-lg !bg-white border !border-gray-200">
       <img
         className="!w-full !h-48 !object-cover"
-        src={"https://picsum.photos/200/200?blur=5"} // Imagen por defecto si no se proporciona una
+        src={`http://localhost:5000/uploads/${image}`} // Imagen por defecto si no se proporciona una
         alt="Post"
       />
       <div className="!px-6 !py-4">
@@ -20,6 +20,9 @@ const PostCard = ({ type_post, title, description, price, rental_duration, renta
           </p>
           <p>
             <span className="font-semibold">Duración:</span> {rental_duration} {rental_unit}
+          </p>
+          <p className="!mt-4 !text-gray-500 bg-gray-100 !p-2 !rounded">
+            <span className="font-semibold">Contacto:</span> {userName} ({userEmail})
           </p>
         </div>
       </div>
