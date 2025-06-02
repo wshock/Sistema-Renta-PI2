@@ -28,34 +28,40 @@ const CreateForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const post = {
-      user_id: user.id,
-      ...formData,
-    };
+  const formPayload = new FormData();
+  formPayload.append("user_id", user.id);
+  formPayload.append("type_post", formData.type_post);
+  formPayload.append("title", formData.title);
+  formPayload.append("description", formData.description);
+  formPayload.append("price", formData.price);
+  formPayload.append("rental_duration", formData.rental_duration);
+  formPayload.append("rental_unit", formData.rental_unit);
+  formPayload.append("status", formData.status);
+  if (formData.photo) {
+    formPayload.append("photo", formData.photo);
+  }
 
-    try {
-      const response = await createPostRequest(post);
-      if (response.status === 201 || response.status === 200) {
-        console.log("Post creado exitosamente");
-        navigate("/feed");
-      } else {
-        throw new Error("Error en la respuesta del servidor");
-      }
-    } catch (error) {
-      console.error("Error al crear el post:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo crear el post. Intenta nuevamente.",
-        confirmButtonColor: "#3085d6",
-      });
+  console.log("Form data being sent:", Object.fromEntries(formPayload.entries()));
+
+  try {
+    const response = await createPostRequest(formPayload); // No metas JSON
+    if (response.status === 201 || response.status === 200) {
+      navigate("/feed");
+    } else {
+      throw new Error("Error en la respuesta del servidor");
     }
-
-    console.log("Formulario enviado");
-    console.log(post);
-  };
+  } catch (error) {
+    console.error("Error al crear el post:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "No se pudo crear el post. Intenta nuevamente.",
+      confirmButtonColor: "#3085d6",
+    });
+  }
+};
   return (
     <>
       <div className=" !my-10 flex flex-col !p-10 w-xl mx-auto bg-white rounded-md shadow-2xl">

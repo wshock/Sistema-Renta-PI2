@@ -1,6 +1,7 @@
 import axios from './axios.js';
 
 const createPostRequest = (postInfo) => {
+    console.log("Creating post with info:", postInfo);
     return axios.post('/posts/post', postInfo)
 }
 
@@ -16,4 +17,8 @@ const deletePostRequest = (postId) => {
     return axios.delete(`/posts/deletePost/${postId}`)
 }
 
-export { createPostRequest, getPostsRequest, getUserPostsRequest, deletePostRequest };
+const searchPostsRequest = (searchTerm) => {
+    return axios.post('/posts/searchPosts', { query: searchTerm })
+}
+
+export { createPostRequest, getPostsRequest, getUserPostsRequest, deletePostRequest, searchPostsRequest };

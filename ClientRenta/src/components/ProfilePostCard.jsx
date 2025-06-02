@@ -32,7 +32,7 @@ const ProfilePostCard = ({
     <div className="!max-w-lg !rounded !overflow-hidden !shadow-lg !bg-white border !border-gray-200 relative">
       <img
         className="!w-full !h-48 !object-cover"
-        src={"https://picsum.photos/200/200?blur=5"}
+        src={`http://localhost:5000/uploads/${image}`}
         alt="Post"
       />
       <div className="!px-6 !py-4">

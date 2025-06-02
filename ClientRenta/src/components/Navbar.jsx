@@ -17,8 +17,9 @@ function Navbar(){
             </a>
 
             <div className='relative !ml-32 flex items-center justify-center gap-3'>
-                <i className='bx bx-search absolute left-3 text-gray-500'></i>
-                <input type='text' placeholder=' Busca tu producto...' className='!py-2 !pl-10 rounded-xl focus:bg-slate-100'/>
+                <a href='/searchProduct' className='bg-[#afc2ff] text-white text-lg !px-5 !py-2 rounded-xl font-semibold shadow-md hover:bg-[#92abff] hover:scale-103 hover:shadow-lg transition-all '>
+                    Busca un producto
+                </a>
             </div>
 
             <div className='flex items-center gap-6 font-bold text-base'>
