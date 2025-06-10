@@ -68,7 +68,7 @@ const CreateForm = () => {
   return (
     <>
       <div className="!my-20 !p-6 sm:!p-8 md:!p-10 !mx-auto !bg-white !rounded-md !shadow-2xl 
-                !w-[320px] sm:!w-[500px] md:!w-[650px] lg:!w-[800px] xl:!w-[1000px]">
+                !w-[320px] sm:!w-[500px] md:!w-[650px] lg:!w-[700px] xl:!w-[700px]">
         <h2 className="!text-2xl !font-bold !mb-4 !mt-4 !text-center">
           Crear un Post
         </h2>
