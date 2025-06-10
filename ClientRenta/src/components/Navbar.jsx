@@ -14,7 +14,7 @@ function Navbar() {
     <header className='!fixed top-0 right-0 w-full !bg-white !drop-shadow-md z-50'>
       <div className='!flex !justify-between !items-center !py-6 !px-8 !md:px-32'>
 
-        <a href='/'>
+        <a href='/feed'>
           <img
             src={logoElkin}
             className='w-28 md:w-32 hover:scale-103 transition-transform'
