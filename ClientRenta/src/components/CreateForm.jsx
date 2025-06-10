@@ -28,140 +28,139 @@ const CreateForm = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const formPayload = new FormData();
-  formPayload.append("user_id", user.id);
-  formPayload.append("type_post", formData.type_post);
-  formPayload.append("title", formData.title);
-  formPayload.append("description", formData.description);
-  formPayload.append("price", formData.price);
-  formPayload.append("rental_duration", formData.rental_duration);
-  formPayload.append("rental_unit", formData.rental_unit);
-  formPayload.append("status", formData.status);
-  if (formData.photo) {
-    formPayload.append("photo", formData.photo);
-  }
-
-  console.log("Form data being sent:", Object.fromEntries(formPayload.entries()));
-
-  try {
-    const response = await createPostRequest(formPayload); // No metas JSON
-    if (response.status === 201 || response.status === 200) {
-      navigate("/feed");
-    } else {
-      throw new Error("Error en la respuesta del servidor");
+    const formPayload = new FormData();
+    formPayload.append("user_id", user.id);
+    formPayload.append("type_post", formData.type_post);
+    formPayload.append("title", formData.title);
+    formPayload.append("description", formData.description);
+    formPayload.append("price", formData.price);
+    formPayload.append("rental_duration", formData.rental_duration);
+    formPayload.append("rental_unit", formData.rental_unit);
+    formPayload.append("status", formData.status);
+    if (formData.photo) {
+      formPayload.append("photo", formData.photo);
     }
-  } catch (error) {
-    console.error("Error al crear el post:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "No se pudo crear el post. Intenta nuevamente.",
-      confirmButtonColor: "#3085d6",
-    });
-  }
-};
+
+    console.log(
+      "Form data being sent:",
+      Object.fromEntries(formPayload.entries())
+    );
+
+    try {
+      const response = await createPostRequest(formPayload); // No metas JSON
+      if (response.status === 201 || response.status === 200) {
+        navigate("/feed");
+      } else {
+        throw new Error("Error en la respuesta del servidor");
+      }
+    } catch (error) {
+      console.error("Error al crear el post:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo crear el post. Intenta nuevamente.",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  };
   return (
     <>
-      <div className=" !my-10 flex flex-col !p-10 w-xl mx-auto bg-white rounded-md shadow-2xl">
-        <h2 className="text-2xl font-bold mb-4">Crear un Post</h2>
+      <div className="!my-20 !p-6 sm:!p-8 md:!p-10 !mx-auto !bg-white !rounded-md !shadow-2xl 
+                !w-[320px] sm:!w-[500px] md:!w-[650px] lg:!w-[700px] xl:!w-[700px]">
+        <h2 className="!text-2xl !font-bold !mb-4 !mt-4 !text-center">
+          Crear un Post
+        </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4" action="">
-          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-            <label className="text-lg font-medium" htmlFor="type_post">
-              Tipo de publicación
-            </label>
-            <select
-              name="type_post"
-              id="type_post"
-              value={formData.type_post}
-              onChange={handleChange}
-              className="!p-1"
+        <form onSubmit={handleSubmit} className="!space-y-4">
+          {[
+            {
+              label: "Tipo de publicación",
+              name: "type_post",
+              type: "select",
+              options: [
+                { value: "offer", label: "Ofrezco" },
+                { value: "request", label: "Busco" },
+              ],
+            },
+            {
+              label: "Título",
+              name: "title",
+              type: "text",
+            },
+            {
+              label: "Descripción",
+              name: "description",
+              type: "textarea",
+            },
+            {
+              label: "Precio",
+              name: "price",
+              type: "number",
+            },
+            {
+              label: "Duración del arriendo",
+              name: "rental_duration",
+              type: "number",
+            },
+            {
+              label: "Unidad",
+              name: "rental_unit",
+              type: "select",
+              options: [
+                { value: "days", label: "Días" },
+                { value: "weeks", label: "Semanas" },
+                { value: "months", label: "Meses" },
+              ],
+            },
+          ].map((field) => (
+            <div
+              key={field.name}
+              className="!flex !flex-col !bg-slate-50 !rounded-md !p-4"
             >
-              <option value="offer">Ofrezco</option>
-              <option value="request">Busco</option>
-            </select>
-          </div>
+              <label className="!text-lg !font-medium !mb-1" htmlFor={field.name}>
+                {field.label}
+              </label>
+              {field.type === "textarea" ? (
+                <textarea
+                  name={field.name}
+                  id={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  rows="3"
+                  className="!p-2 !rounded !border !border-gray-300"
+                />
+              ) : field.type === "select" ? (
+                <select
+                  name={field.name}
+                  id={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  className="!p-2 !rounded !border !border-gray-300"
+                >
+                  {field.options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type={field.type}
+                  name={field.name}
+                  id={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  className="!p-2 !rounded !border !border-gray-300"
+                  min={field.type === "number" ? "0" : undefined}
+                />
+              )}
+            </div>
+          ))}
 
-          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-            <label className="text-lg font-medium" htmlFor="title">
-              Título
-            </label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="!p-1"
-            />
-          </div>
-
-          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-            <label className="text-lg font-medium" htmlFor="description">
-              Descripción
-            </label>
-            <textarea
-              className="!p-1"
-              name="description"
-              id="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows="3 " // Puedes ajustar el número de filas según sea necesario
-            ></textarea>
-          </div>
-
-          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-            <label className="text-lg font-medium" htmlFor="price">
-              Precio
-            </label>
-            <input
-              type="number"
-              name="price"
-              id="price"
-              value={formData.price}
-              onChange={handleChange}
-              className="!p-1"
-              min="0"
-            />
-          </div>
-
-          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-            <label className="text-lg font-medium" htmlFor="rental_duration">
-              Duración del arriendo
-            </label>
-            <input
-              type="number"
-              name="rental_duration"
-              id="rental_duration"
-              value={formData.rental_duration}
-              onChange={handleChange}
-              className="!p-1"
-              min="0"
-            />
-          </div>
-
-          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-            <label className="text-lg font-medium" htmlFor="rental_unit">
-              Unidad
-            </label>
-            <select
-              name="rental_unit"
-              id="rental_unit"
-              value={formData.rental_unit}
-              onChange={handleChange}
-              className="!p-1"
-            >
-              <option value="days">Días</option>
-              <option value="weeks">Semanas</option>
-              <option value="months">Meses</option>
-            </select>
-          </div>
-
-          
-          <div className="flex flex-col bg-slate-50 rounded-md !p-3 !my-4">
-            <label className="text-lg font-medium mb-2" htmlFor="photo">
+          <div className="!flex !flex-col !bg-slate-50 !rounded-md !p-4">
+            <label className="!text-lg !font-medium !mb-2" htmlFor="photo">
               Imagen
             </label>
             <input
@@ -175,26 +174,30 @@ const CreateForm = () => {
                   photo: e.target.files[0],
                 }))
               }
-              className="!mt-2 text-sm text-gray-500"
+              className="!text-sm !text-gray-500 hidden"
             />
             <button
               type="button"
-              className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 transition "
+              className="!bg-blue-500 !text-white !rounded !px-4 !py-2 !hover:bg-blue-600 !transition !w-fit"
               onClick={() => document.getElementById("photo").click()}
             >
               Subir imagen
             </button>
             {formData.photo && (
-              <span className="mt-2 text-sm text-gray-600">{formData.photo.name}</span>
+              <span className="!mt-2 !text-sm !text-gray-600">
+                {formData.photo.name}
+              </span>
             )}
           </div>
 
-          <button
-            type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm !px-5 !py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            Publicar
-          </button>
+          <div className="!text-center !pb-6">
+            <button
+              type="submit"
+              className="!text-white !bg-blue-700 !hover:bg-blue-800 !focus:ring-4 !focus:ring-blue-300 !font-medium !rounded-lg !text-sm !px-6 !py-2.5 !transition"
+            >
+              Publicar
+            </button>
+          </div>
         </form>
       </div>
     </>

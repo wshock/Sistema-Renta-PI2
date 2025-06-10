@@ -10,8 +10,7 @@ import ProfilePostCard from "../components/ProfilePostCard.jsx";
 
 const MySwal = withReactContent(Swal);
 
-function Profile() {    
-
+function Profile() {
   const { user } = useAuth();
   const handleEditProfile = () => {
     MySwal.fire({
@@ -50,11 +49,11 @@ function Profile() {
           return false;
         }
         if (name.length > 32) {
-            Swal.showValidationMessage(
-              "Tu nombre no puede tener más de 32 caracteres"
-            );
-            return false;
-          }
+          Swal.showValidationMessage(
+            "Tu nombre no puede tener más de 32 caracteres"
+          );
+          return false;
+        }
 
         const updateInfo = {
           name,
@@ -63,8 +62,12 @@ function Profile() {
         try {
           const res = await editProfileRequest(updateInfo);
           if (res.status === 200) {
-            Swal.fire("Éxito", "Perfil actualizado correctamente", "success").then(() => {
-                window.location.reload();
+            Swal.fire(
+              "Éxito",
+              "Perfil actualizado correctamente",
+              "success"
+            ).then(() => {
+              window.location.reload();
             });
           } else {
             throw new Error("Error en la actualización");
@@ -76,7 +79,6 @@ function Profile() {
       },
     });
   };
-
 
   const [posts, setPosts] = useState([]);
 
@@ -94,30 +96,28 @@ function Profile() {
     fetchPosts();
   }, []);
 
-
-
   return (
-    <div className="flex flex-col">
-      <HomeButton></HomeButton>
+    <div className="!flex !flex-col !px-4 md:!px-12">
+      <HomeButton />
 
-      <div className="flex justify-center items-center min-h-60">
-        <div className="w-full max-w-lg bg-white shadow-2xl rounded-2xl !p-6 border border-gray-200 flex flex-row items-center gap-6">
+      <div className="!flex !justify-center !items-center !min-h-60 !mt-20">
+        <div className="!w-full !max-w-3xl !bg-white !shadow-2xl !rounded-2xl !p-6 !border !border-gray-200 !flex !flex-col md:!flex-row !items-center !gap-6">
           <img
             src={userDefault}
             alt="User Avatar"
-            className="w-32 h-32 rounded-full border-4 border-gray-300 shadow-md"
+            className="!w-28 !h-28 md:!w-32 md:!h-32 !rounded-full !border-4 !border-gray-300 !shadow-md"
           />
-          <div className="flex flex-col text-left flex-grow">
-            <h2 className="text-2xl font-semibold text-gray-800 break-all overflow-hidden max-w-full">
+          <div className="!flex !flex-col !text-left !flex-grow !w-full">
+            <h2 className="!text-xl md:!text-2xl !font-semibold !text-gray-800 !break-words">
               {user.name}
             </h2>
-            <p className="text-gray-600 text-sm">{user.email}</p>
-            <p className="!mt-2 text-gray-700 text-sm break-all overflow-hidden max-w-full">
+            <p className="!text-gray-600 !text-sm !break-all">{user.email}</p>
+            <p className="!mt-2 !text-gray-700 !text-sm !break-words !whitespace-pre-wrap">
               {user.bio}
             </p>
             <button
               onClick={handleEditProfile}
-              className="!mt-4 bg-[#8ba6ff] text-white font-medium !px-5 !py-1 rounded-xl hover:bg-[#7f90c9] hover:scale-103 cursor-pointer transition shadow-md w-fit"
+              className="!mt-4 !bg-[#8ba6ff] !text-white !font-medium !px-5 !py-1 !rounded-xl !hover:bg-[#7f90c9] !hover:scale-103 !transition !shadow-md !w-fit"
             >
               Editar perfil
             </button>
@@ -125,41 +125,46 @@ function Profile() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center space-between items-center !mt-6 !mb-4 bg-gradient-to-b from-white/90 via-white/60 to-gray-100/90 shadow-md rounded-lg p-4 border border-gray-200 w-3xl"> 
-        <h2 className="text-3xl !mt-10 font-semibold text-gray-800">Post activos</h2>
 
-        <div className="grid gap-6 !my-15">
-        {posts.map((post) => (
-          <ProfilePostCard
-            key={post.id}
-            type_post={post.type_post}
-            title={post.title}
-            description={post.description}
-            price={post.price}
-            rental_duration={post.rental_duration}
-            rental_unit={post.rental_unit}
-            image={post.photo} // Esto asume que en la BD guardaste `/uploads/nombre.jpg`
-            onDelete={async () => {
-              try {
-                const res = await deletePostRequest(post.id);
-                if (res.status === 200) {
-                  Swal.fire("Éxito", "Post eliminado correctamente", "success").then(() => {
-                    window.location.reload();
-                  });
-                } else {
-                  throw new Error("Error al eliminar el post");
+      <div className="!flex !flex-col !items-center !mt-10 !mb-8 !bg-gradient-to-b !from-white/90 !via-white/60 !to-gray-100/90 !shadow-md !rounded-lg !p-6 !border !border-gray-200 !w-full !max-w-5xl !mx-auto">
+        <h2 className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 !mb-6 !text-center">
+          Post activos
+        </h2>
+
+        <div className="!flex !flex-col !gap-6 !items-center !w-full">
+          {posts.map((post) => (
+            <ProfilePostCard
+              key={post.id}
+              type_post={post.type_post}
+              title={post.title}
+              description={post.description}
+              price={post.price}
+              rental_duration={post.rental_duration}
+              rental_unit={post.rental_unit}
+              image={post.photo}
+              onDelete={async () => {
+                try {
+                  const res = await deletePostRequest(post.id);
+                  if (res.status === 200) {
+                    Swal.fire(
+                      "Éxito",
+                      "Post eliminado correctamente",
+                      "success"
+                    ).then(() => {
+                      window.location.reload();
+                    });
+                  } else {
+                    throw new Error("Error al eliminar el post");
+                  }
+                } catch (error) {
+                  console.error(error);
+                  Swal.fire("Error", "No se pudo eliminar el post", "error");
                 }
-              } catch (error) {
-                console.error(error);
-                Swal.fire("Error", "No se pudo eliminar el post", "error");
-              }
-            }}
-          />
-        ))}
+              }}
+            />
+          ))}
+        </div>
       </div>
-      </div>
-
-      
     </div>
   );
 }
