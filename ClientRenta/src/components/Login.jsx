@@ -53,9 +53,7 @@ function Login(){
                     </div>
                     {errors.password && <p className='text-red-700 bg-red-300 !-mt-4 !mb-6 rounded'>Contraseña requerida</p>}
 
-                    <div className='forgot-link'> 
-                        <a href='#'>¿Olvidaste tu contraseña?</a>
-                    </div>
+                    
 
                     <button type='submit' className='btn'>Ingresar</button>
                 </form>
